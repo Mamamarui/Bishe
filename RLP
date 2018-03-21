@@ -1,0 +1,14 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+import random
+
+#位置编码
+LP1=random.sample(range(1,12),11)
+LP2=random.sample(range(12,26),14)
+LP=LP1+LP2
+
+#方向编码
+direction=[]
+for i in range(25):
+    direction.append(random.randint(1,4))
+    i+=1
