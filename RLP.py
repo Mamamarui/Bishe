@@ -94,6 +94,10 @@ def adjustLP(GLP):
                         CLP[1,i,j]=CLP[1,j,i]
     return CLP
 
+def allLP(CLP):
+    ALP=np.zeros((2,15,15),int)
+    
+
 #def generatelabels(CYCLE1LP):
     
 
