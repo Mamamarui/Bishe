@@ -83,14 +83,29 @@ def adjustLP(GLP):
                 else:
                     CLP[0,i,j]=CLP[0,j,i]
                     if(j==0):
-                        CLP[0,i,j]=CLP[0,j,i]+1
-                        if(CLP[0,i,j]==5):
-                            CLP[0,i,j]=1
+                        if(CLP[1,j,i]==0):
+                            CLP[1,i,j]=0
+                        else:
+                            CLP[1,i,j]=CLP[1,j,i]+1
+                            if(CLP[1,i,j]==5):
+                                CLP[1,i,j]=1
                     else:
                         CLP[0,i,j]=CLP[0,j,i]
-        
+                        CLP[1,i,j]=CLP[1,j,i]
     return CLP
-            
+
+#def generatelabels(CYCLE1LP):
+    
+
+path_cycle1="F:\Bishe\LP"
+
+file=open(path_cycle1,'r')
+CYCLE1LP=[[]]*15
+temp=file.readlines()
+for i in range(15):
+    CYCLE1LP[i]=temp[i].split()
+print("CYCLE1LP:")
+print(CYCLE1LP)
 
 
 GLP=generateLP()
