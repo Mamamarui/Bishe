@@ -23,17 +23,16 @@ def generateLP():
                             result[1,i]=n
                             result[2,i]=random.randint(1,4)
                             counter[0,n-1]+=1
-                else:                                                          #新料
-                    if(n==17):
-                        if(counter[0,n-1]<=6):
-                            result[1,i]=n
-                            result[2,i]=0
-                            counter[0,n]+=1
-                    elif(n==18):
-                        if(counter[0,n-1]<=5):
-                            result[1,i]=n
-                            result[2,i]=0
-                            counter[0,n-1]+=1
+                elif(n==17):
+                    if(counter[0,n-1]<11):
+                        result[1,i]=n
+                        result[2,i]=0
+                        counter[0,n-1]+=1
+                elif(n==18):
+                    if(counter[0,n-1]<9):
+                        result[1,i]=n
+                        result[2,i]=0
+                        counter[0,n-1]+=1
         else:                                                                  #1/8对称区域上
             while(result[1,i]==0):
                 n=random.randint(1,21)
@@ -42,18 +41,17 @@ def generateLP():
                         if(counter[0,n-1]<1):
                             result[1,i]=n
                             result[2,i]=random.randint(1,4)
-                            counter[0,n-1]+=1
-                else:                                                          #新料
-                    if(n==17):
-                        if(counter[0,n-1]<=6):
-                            result[1,i]=n
-                            result[2,i]=0
-                            counter[0,n-1]+=1
-                    elif(n==18):
-                        if(counter[0,n-1]<=5):
-                            result[1,i]=n
-                            result[2,i]=0
-                            counter[0,n-1]+=1
+                            counter[0,n-1]+=2
+                elif(n==17):
+                    if(counter[0,n-1]<11):
+                        result[1,i]=n
+                        result[2,i]=0
+                        counter[0,n-1]+=2
+                elif(n==18):
+                    if(counter[0,n-1]<9):
+                        result[1,i]=n
+                        result[2,i]=0
+                        counter[0,n-1]+=2
     return result
 
 def adjustLP(GLP):
@@ -86,9 +84,10 @@ def adjustLP(GLP):
                         if(CLP[1,j,i]==0):
                             CLP[1,i,j]=0
                         else:
-                            CLP[1,i,j]=CLP[1,j,i]+1
-                            if(CLP[1,i,j]==5):
-                                CLP[1,i,j]=1
+                            if(CLP[1,j,i]==1):
+                                CLP[1,i,j]=4
+                            else:
+                                CLP[1,i,j]=CLP[1,j,i]-1
                     else:
                         CLP[0,i,j]=CLP[0,j,i]
                         CLP[1,i,j]=CLP[1,j,i]
@@ -96,28 +95,64 @@ def adjustLP(GLP):
 
 def allLP(CLP):
     ALP=np.zeros((2,15,15),int)
-    
+    for i in range(8):                                                         #1/2堆芯布置
+        if(i==0):
+            ALP[:,i+7,7:15]=CLP[:,i,:]
+        else:
+            ALP[0,7-i,7:15]=CLP[0,i,:]
+            ALP[0,7+i,7:15]=CLP[0,i,:]
+            ALP[1,i+7,7:15]=CLP[1,i,:]
+            for j in range(8):
+                if(j==0):
+                    if(ALP[1,7,7+i]==0):
+                        ALP[1,7-i,7]=0
+                    elif(ALP[1,7,7+i]==4):
+                        ALP[1,7-i,7]=1
+                    else:
+                        ALP[1,7-i,7]=ALP[1,7,7+i]+1
+                else:
+                    if(ALP[1,7+i,7+j]==0):
+                        ALP[1,7-i,7+j]=0
+                    elif(ALP[1,7+i,7+j]==4):
+                        ALP[1,7-i,7+j]=1
+                    else:
+                        ALP[1,7-i,7+j]=ALP[1,7+i,7+j]+1
+    for i in range(8):
+        if(i!=0):
+            ALP[0,:,7-i]=ALP[0,:,7+i]
+    for i in range(15):
+        for j in range(7):
+            if(j!=0):
+                if(i<7):
+                    if(ALP[1,i,7+j]==0):
+                        ALP[1,i,7-j]=0
+                    elif(ALP[1,i,7+j]==4):
+                        ALP[1,i,7-j]=1
+                    else:
+                        ALP[1,i,7-j]=ALP[1,i,7+j]+1
+                elif(i>7):
+                    if(ALP[1,i,7+j]==0):
+                        ALP[1,i,7-j]=0
+                    elif(ALP[1,i,7+j]==1):
+                        ALP[1,i,7-j]=4
+                    else:
+                        ALP[1,i,7-j]=ALP[1,i,7+j]-1
+                elif(i==7):
+                    if(ALP[1,i,7+j]==0):
+                        ALP[1,i,7-j]=0
+                    elif(ALP[1,i,7+j]==3):
+                        ALP[1,i,7-j]=1
+                    elif(ALP[1,i,7+j]==4):
+                        ALP[1,i,7-j]=2
+                    else:
+                        ALP[1,i,7-j]=ALP[1,i,7+j]+2
+    return ALP
+            
 
 #def generatelabels(CYCLE1LP):
     
 
-path_cycle1="F:\Bishe\LP"
 
-file=open(path_cycle1,'r')
-CYCLE1LP=[[]]*15
-temp=file.readlines()
-for i in range(15):
-    CYCLE1LP[i]=temp[i].split()
-print("CYCLE1LP:")
-print(CYCLE1LP)
-
-
-GLP=generateLP()
-print("glp:")
-print(GLP)
-CLP=adjustLP(GLP)
-print("clp:")
-print(CLP)
 
 
                         
