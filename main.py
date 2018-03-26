@@ -1,5 +1,5 @@
 import RLP
-import card
+#import card
 #import numpy as np
 
 GLP=RLP.generateLP()

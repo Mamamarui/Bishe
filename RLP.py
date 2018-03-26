@@ -5,7 +5,8 @@ import random
 def generateLP():
     order=random.sample(range(1,26),25)
     result=np.zeros((3,25),int)
-    counter=np.zeros((1,18))
+    counter=np.zeros((1,21))
+    F1=[17,19]
     for i in range(25):
         result[0,i]=order[i]                                                   #坐标编号
         if(result[0,i]<=8 or result[0,i]==15 or result[0,i]==20 or \
@@ -23,16 +24,36 @@ def generateLP():
                             result[1,i]=n
                             result[2,i]=random.randint(1,4)
                             counter[0,n-1]+=1
-                elif(n==17):
-                    if(counter[0,n-1]<11):
-                        result[1,i]=n
-                        result[2,i]=0
-                        counter[0,n-1]+=1
-                elif(n==18):
-                    if(counter[0,n-1]<9):
-                        result[1,i]=n
-                        result[2,i]=0
-                        counter[0,n-1]+=1
+                elif(n==17 or n==18 or n==19):
+                    if(counter[0,16]+counter[0,17]+counter[0,18]<11):
+                        if(n==17 or n==19):
+                            if(counter[0,n-1]<3):
+                                result[1,i]=n
+                                result[2,i]=0
+                                counter[0,n-1]+=1
+                            else:
+                                result[1,i]=18
+                                result[2,i]=0
+                                counter[0,17]+=1
+                        else:
+                            if(counter[0,n-1]<6):
+                                result[1,i]=n
+                                result[2,i]=0
+                                counter[0,n-1]+=1
+                            else:
+                                result[1,i]=random.choice(F1)
+                                result[2,i]=0
+                                counter[0,result[1,i]-1]+=1
+                elif(n==20 or n==21):
+                    if(counter[0,19]+counter[0,20]<9):
+                        if(n==20 and counter[0,19]<6):
+                            result[1,i]=n
+                            result[2,i]=0
+                            counter[0,n-1]+=1
+                        else:
+                            result[1,i]=21
+                            result[2,i]=0
+                            counter[0,20]+=1
         else:                                                                  #1/8对称区域上
             while(result[1,i]==0):
                 n=random.randint(1,21)
@@ -42,16 +63,36 @@ def generateLP():
                             result[1,i]=n
                             result[2,i]=random.randint(1,4)
                             counter[0,n-1]+=2
-                elif(n==17):
-                    if(counter[0,n-1]<11):
-                        result[1,i]=n
-                        result[2,i]=0
-                        counter[0,n-1]+=2
-                elif(n==18):
-                    if(counter[0,n-1]<9):
-                        result[1,i]=n
-                        result[2,i]=0
-                        counter[0,n-1]+=2
+                elif(n==17 or n==18 or n==19):
+                    if(counter[0,16]+counter[0,17]+counter[0,18]<11):
+                        if(n==17 or n==19):
+                            if(counter[0,n-1]<3):
+                                result[1,i]=n
+                                result[2,i]=0
+                                counter[0,n-1]+=2
+                            else:
+                                result[1,i]=18
+                                result[2,i]=0
+                                counter[0,17]+=2
+                        else:
+                            if(counter[0,n-1]<6):
+                                result[1,i]=n
+                                result[2,i]=0
+                                counter[0,n-1]+=2
+                            else:
+                                result[1,i]=random.choice(F1)
+                                result[2,i]=0
+                                counter[0,result[1,i]-1]+=2
+                elif(n==20 or n==21):
+                    if(counter[0,19]+counter[0,20]<9):
+                        if(n==20 and counter[0,19]<6):
+                            result[1,i]=n
+                            result[2,i]=0
+                            counter[0,n-1]+=2
+                        else:
+                            result[1,i]=21
+                            result[2,i]=0
+                            counter[0,20]+=2
     return result
 
 def adjustLP(GLP):
@@ -149,7 +190,6 @@ def allLP(CLP):
     return ALP
             
 
-#def generatelabels(CYCLE1LP):
     
 
 
