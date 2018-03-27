@@ -162,7 +162,7 @@ def allLP(CLP):
         if(i!=0):
             ALP[0,:,7-i]=ALP[0,:,7+i]
     for i in range(15):
-        for j in range(7):
+        for j in range(8):
             if(j!=0):
                 if(i<7):
                     if(ALP[1,i,7+j]==0):
