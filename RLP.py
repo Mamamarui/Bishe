@@ -10,7 +10,7 @@ def generateLP():
     for i in range(25):
         result[0,i]=order[i]                                                   #坐标编号
         if(result[0,i]<=8 or result[0,i]==15 or result[0,i]==20 or \
-           result[0,i]==24):                                                    #1/4对称线上
+           result[0,i]==24):                                                   #1/4对称线上
             while(result[1,i]==0):
                 n=random.randint(1,21)
                 if(n<17):                                                      #旧料
@@ -25,7 +25,7 @@ def generateLP():
                             result[2,i]=random.randint(1,4)
                             counter[0,n-1]+=1
                 elif(n==17 or n==18 or n==19):
-                    if(counter[0,16]+counter[0,17]+counter[0,18]<11):
+                    if(counter[0,16]+counter[0,17]+counter[0,18]<10):
                         if(n==17 or n==19):
                             if(counter[0,n-1]<3):
                                 result[1,i]=n
@@ -45,7 +45,7 @@ def generateLP():
                                 result[2,i]=0
                                 counter[0,result[1,i]-1]+=1
                 elif(n==20 or n==21):
-                    if(counter[0,19]+counter[0,20]<9):
+                    if(counter[0,19]+counter[0,20]<8):
                         if(n==20 and counter[0,19]<6):
                             result[1,i]=n
                             result[2,i]=0
@@ -189,7 +189,76 @@ def allLP(CLP):
                         ALP[1,i,7-j]=ALP[1,i,7+j]+2
     return ALP
             
+def qto(origin,len_quarter):
+    if(type(origin)==list):
+        qarray=np.zeros((len_quarter,len_quarter))
+        for i in range(len_quarter):
+            for j in range(len_quarter):
+                qarray[i,j]=origin[i][j]
+    else:
+        qarray=origin
+    one_core=np.zeros((len_quarter*2-1,len_quarter*2-1),int)
+    one_core[0:len_quarter,len_quarter-1:len_quarter*2-1]=qarray
+    for i in range(len_quarter):
+        if(i!=0):
+            one_core[len_quarter-1+i,:]=one_core[len_quarter-1-i,:]
+    for i in range(len_quarter):
+        if(i!=0):
+            one_core[:,len_quarter-1-i]=one_core[:,len_quarter-1+i]
+    return one_core
 
+def qto_ma(origin,len_quarter):
+    if(type(origin)==list):
+        qarray=np.zeros((len_quarter,len_quarter))
+        for i in range(len_quarter):
+            for j in range(len_quarter):
+                qarray[i,j]=origin[i][j]
+    else:
+        qarray=origin
+    
+    one_core=np.zeros((len_quarter*2,len_quarter*2))
+    one_core[0:len_quarter,len_quarter:len_quarter*2]=qarray
+    for i in range(len_quarter):
+        one_core[2*len_quarter-1-i,:]=one_core[i,:]
+    for i in range(len_quarter):
+        one_core[:,i]=one_core[:,2*len_quarter-1-i]
+    return one_core
+
+def whirl(origin,len_quarter):
+    if(type(origin)==list):
+        qarray=np.zeros((len_quarter,len_quarter))
+        for i in range(len_quarter):
+            for j in range(len_quarter):
+                qarray[i,j]=origin[i][j]
+    else:
+        qarray=origin
+        
+    one_core=np.zeros((len_quarter*2,len_quarter*2))
+    one_core[0:len_quarter,len_quarter:len_quarter*2]=qarray
+    for i in range(2*len_quarter):
+        for j in range(2*len_quarter):
+            if(i<17 and j<17):
+                if(one_core[j,33-i]==0):
+                    one_core[i,j]=0
+                else:
+                    one_core[i,j]=one_core[j,33-i]+1
+                    if(one_core[i,j]==5):
+                        one_core[i,j]=1
+            elif(i>=17 and j<17):
+                if(one_core[j,33-i]==0):
+                    one_core[i,j]=0
+                else:
+                    one_core[i,j]=one_core[j,33-i]+1
+                    if(one_core[i,j]==5):
+                        one_core[i,j]=1
+            elif(i>=17 and j>=17):
+                if(one_core[33-j,i]==0):
+                    one_core[i,j]=0
+                else:
+                    one_core[i,j]=one_core[33-j,i]-1
+                    if(one_core[i,j]==0):
+                        one_core[i,j]=4
+    return one_core
     
 
 

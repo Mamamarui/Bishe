@@ -1,25 +1,29 @@
+# -*- coding: utf-8 -*-
 import RLP
 import card
-#import numpy as np
 
-path_out="F:\Bishe\out"
+path_input="F:\Bishe\code\input\BAMBOO_AP1000_cycle2.DAT"
+path_out="F:\Bishe\code\out"
+
+len_quarter=17
+z_mesh=25
+
+file_input=open(path_input,'r')
+input_lines=file_input.readlines()
+input_len=len(input_lines)
+file_input.close()
 
 GLP=RLP.generateLP()
 CLP=RLP.adjustLP(GLP)
-print("clp:")
-print(CLP)
 ALP=RLP.allLP(CLP)
-print("ALP:")
-print(ALP)
 la=card.generatelabels(ALP)
+        
+out_lines=card.modify_labels(input_lines,la)
+out_lines=card.modify_MaterialArr(out_lines,z_mesh,2,1,len_quarter,ALP)
+out_lines=card.modify_OrientationArr(out_lines,z_mesh,len_quarter)
 
-file_out=open(path_out,'w+')
-for i in range(15):
-    for j in range(15):
-        if(j!=14):
-            temp=la[i][j]+' '
-            file_out.write(temp)
-        else:
-            temp=la[i][j]+'\n'
-            file_out.write(temp)
+file_name=path_out+'\\test'
+file_out=open(file_name,'w+')        
+file_out.writelines(out_lines)
 file_out.close()
+
